@@ -51,6 +51,10 @@ class PartyTestsDatabase(unittest.TestCase):
         self.client = app.test_client()
         app.config['TESTING'] = True
 
+        with self.client as c:
+            with c.session_transaction() as session:
+                session['RSVP'] = True
+
         # Connect to test database (uncomment when testing database)
         connect_to_db(app, "postgresql:///testdb")
 
@@ -71,6 +75,8 @@ class PartyTestsDatabase(unittest.TestCase):
 
         self.assertIn(b"Clue", result.data)
         self.assertIn(b"Solve a mystery", result.data)
+
+
 
         # print("FIXME")
 
